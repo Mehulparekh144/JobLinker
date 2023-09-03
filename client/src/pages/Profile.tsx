@@ -1,20 +1,27 @@
 import React from 'react'
 import MotionDiv from '../components/MotionDiv'
-import {RoughNotation} from 'react-rough-notation'
+import ProfileComponent from '../components/ProfileComponent'
+import SkillComponent from '../components/SkillComponent'
+import useUserData from '../hooks/useUserData'
+import Loader from '../components/Loader'
 
 const Profile = () => {
+
+    const {isLoading} = useUserData()
+
     return (
-        <MotionDiv className=' m-4 md:m-16'>
-            <div className='w-max my-4'>
-                <RoughNotation type="box" show={true} color='#fdc500'>
-                    <h1 className='text-3xl md:text-5xl z-10'>Profile</h1>
-                </RoughNotation>
-            </div>
+        <MotionDiv className='flex flex-col gap-4 m-4 md:m-16'>
+            {
+                isLoading ? 
+                <Loader/>
+                :
+                <MotionDiv>
+                <ProfileComponent/>
+                <SkillComponent/>
+                </MotionDiv>
 
-            <div className='border-2 border-main'>
-                
-
-            </div>
+            }
+            
 
         </MotionDiv>
     )

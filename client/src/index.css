@@ -1,13 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-button, .link-button{
-    @apply w-max bg-main text-second rounded-lg px-4 py-1 hover:bg-main/90 transition ease-in
+button,
+.link-button {
+  @apply w-max bg-main text-second rounded-lg px-4 py-1 hover:bg-main/90 transition ease-in;
 }
 
-input,textarea,select{
-    @apply outline-none border-b-2 border-b-main px-1  py-2 font-secondary w-full
+input,
+textarea,
+select {
+  @apply outline-none border-b-2 border-b-main px-1  py-2 font-secondary w-full z-0;
+}
+
+body::-webkit-scrollbar {
+  width: 0.2em;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #fdc500;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #181716;
+}
+
+.custom-loader {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(farthest-side, #2f2e2d 90%, #0000) center/16px
+      16px,
+    radial-gradient(farthest-side, #b1aeaa 90%, #0000) bottom/12px 12px;
+  background-repeat: no-repeat;
+  animation: s7 1s infinite linear;
+  position: relative;
+}
+.custom-loader::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  inset: auto 0 16px;
+  margin: auto;
+  background: #e4e4ed;
+  border-radius: 50%;
+  transform-origin: 50% calc(100% + 10px);
+  animation: inherit;
+  animation-duration: 0.5s;
+}
+
+@keyframes s7 {
+  100% {
+    transform: rotate(1turn);
+  }
 }

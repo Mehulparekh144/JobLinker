@@ -1,6 +1,6 @@
-import React  from 'react'
+import React from 'react'
 import MotionDiv from '../components/MotionDiv'
-import {RoughNotation} from 'react-rough-notation'
+import { RoughNotation } from 'react-rough-notation'
 import JobComponent from '../components/JobComponent'
 
 
@@ -115,8 +115,8 @@ const Home = () => {
             <div className='my-14'>
                 <div className='w-max'>
                     <RoughNotation type="box" show={true} color='#fdc500'>
-                    <h1 className='text-3xl md:text-5xl z-10'>Job Opportunities</h1>
-                </RoughNotation>
+                        <h1 className='text-3xl md:text-5xl z-10'>Job Opportunities</h1>
+                    </RoughNotation>
                 </div>
 
                 <div className='flex md:flex-row flex-col gap-3 my-4'>
@@ -131,18 +131,19 @@ const Home = () => {
             </div>
             <div className=' flex flex-col md:flex-row flex-wrap gap-4 items-start justify-start  rounded-lg p-4'>
                 {
-                    jobDetails ? jobDetails.map((item)=>(
+                    jobDetails ? jobDetails.map((item, index) => (
                         <JobComponent title={item.title}
+                            key={index}
                             company={item.company}
                             type={item.type}
                             salary={item.salary} // Provide an appropriate salary value
                             location={item.location}
                             applicants={item.applicants}
                             date={item.date}
-                            experience= {item.experience}/>
+                            experience={item.experience} />
                     ))
-                    :
-                    <h1>No Jobs</h1>
+                        :
+                        <h1>No Jobs</h1>
                 }
             </div>
 
