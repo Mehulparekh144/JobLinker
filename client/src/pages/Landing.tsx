@@ -8,8 +8,11 @@ import { AiOutlineArrowRight } from '@react-icons/all-files/ai/AiOutlineArrowRig
 import { RoughNotation } from 'react-rough-notation'
 import {Link} from 'react-router-dom'
 import MotionDiv from '../components/MotionDiv'
+import useUserData from '../hooks/useUserData'
 
 const Landing = () => {
+    const {userData} = useUserData()
+
     return (
         <MotionDiv className='font-primary h-[95vh] overflow-x-hidden max-w-screen flex flex-col justify-center px-4 md:px-32 items-center py-4  border-main border-4 m-4'>
             <div className='flex'>
@@ -24,7 +27,7 @@ const Landing = () => {
                 <h1 className='text-3xl md:text-6xl p-1'>JobLinker.com</h1>
                 </RoughNotation>
                     <h1 className='text-2xl md:text-5xl h-max'>Bridging Careers, Connecting Opportunities</h1>
-                <Link to="/login" className='link-button flex items-center gap-4 group' >
+                <Link to={userData?`/user/home`:`/login`} className='link-button flex items-center gap-4 group' >
                     Get Started
                     <div className='hidden group-hover:block transition-all ease-in-out'>
                         <AiOutlineArrowRight />

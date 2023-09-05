@@ -12,11 +12,11 @@ button,
 input,
 textarea,
 select {
-  @apply outline-none border-b-2 border-b-main px-1  py-2 font-secondary w-full z-0;
+  @apply outline-none bg-transparent border-b-2 border-b-main px-1  py-2 font-secondary w-full z-0;
 }
 
 body::-webkit-scrollbar {
-  width: 0.2em;
+  width: 0.4em;
 }
 
 body::-webkit-scrollbar-track {

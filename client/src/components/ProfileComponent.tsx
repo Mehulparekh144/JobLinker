@@ -5,9 +5,7 @@ import { MdCancel } from '@react-icons/all-files/md/MdCancel'
 import useUserData from '../hooks/useUserData'
 
 const ProfileComponent = () => {
-
     const { userData } = useUserData()
-
     const [edit, setEdit] = useState(true)
 
 
@@ -40,7 +38,7 @@ const ProfileComponent = () => {
                     }
                 </div>
             </div>
-            <div className='border-2 border-main flex flex-col md:flex-row p-6 rounded-md md:justify-start gap-12 w-full'>
+            <div className='border-2 bg-gray-100 border-main flex flex-col md:flex-row p-6 rounded-md md:justify-start gap-12 w-full'>
                 <div className='relative rounded-full w-28 md:w-52  border-4 border-spacing-4 border-main z-1'>
                     <img src={userData?.avatar} alt="" className='w-full object-cover rounded-full  border-4 border-second' />
                     <button className={`absolute ${edit ? 'hidden' : 'block'} bg-second text-main hover:bg-second/90 rounded-full p-1 cursor-pointer bottom-0 right-0 md:right-8`}  >

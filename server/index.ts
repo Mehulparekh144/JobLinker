@@ -14,8 +14,10 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json())
+app.use(express.urlencoded({extended : false}));
 app.use(cookieParser())
 dotenv.config()
+
 
 app.listen(8000, () => (
     console.log("Server up on 8000")
