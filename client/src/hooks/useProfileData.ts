@@ -18,17 +18,19 @@ const useProfileData = () => {
     const [profileData, setProfileData] = useState<ProfileDataProps | null>(null);
 
     useEffect(()=> {
-        if(userData){
+        if(userData?.profile_id){
             axios.get("/user/skills/" + userData?.id).then((response)=>{
                 setProfileData(response.data)
+                return 
             }).catch((err)=>{
                 console.log("Error while fetching data " + err);
+                return
                 
             })
         }
-    },[userData])
+    },[userData?.profile_id])
 
-    return {profileData}
+    return {profileData }
     
 
 }

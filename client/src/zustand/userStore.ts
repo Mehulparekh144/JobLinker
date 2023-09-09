@@ -12,13 +12,24 @@ interface UserData {
     avatar : string;
 }
 
+interface ProfileData {
+    id: number,
+    total_work_ex: string,
+    recent_title: string,
+    recent_company: string,
+    resume: string,
+    skills: Array<string>
+}
+
 interface UserStore {
     userData: UserData | null;
+    profileData : ProfileData | null;
     fetchUserData: () => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
     userData: null,
+    profileData : null,
 
     fetchUserData: async () => {
         try {
@@ -27,7 +38,14 @@ export const useUserStore = create<UserStore>((set) => ({
                 throw new Error('Failed to fetch user data');
             }
             const userData: UserData = response.data;
-            set({ userData });
+            if(userData?.profile_id){
+                const response = await axios.get("http://localhost:8000/api/user/skills/" +  userData.id)
+                const profileData : ProfileData = response.data;
+                set({ userData , profileData });
+            }
+            else{
+                set({userData})
+            }
         } catch (error) {
             console.error(error);
         }

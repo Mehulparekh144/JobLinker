@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { RoughNotation } from 'react-rough-notation'
 import axios from 'axios'
 import useUserData from '../hooks/useUserData'
+import {toast} from 'react-toastify'
+import toastOptions from '../utils/toastOptions'
 
 
 
@@ -37,9 +39,10 @@ const NavbarComponent = () => {
     const logoutHandler = () => {
         axios.get("/user/logout").then(() => {
             navigate("/login")
-            alert("Logged Out")
+            toast.success("Logged out successfully" , toastOptions)
         }).catch(() => {
-            alert("Error while logging out")
+            toast.error("Error while logging out" , toastOptions)
+
         })
     }   
 

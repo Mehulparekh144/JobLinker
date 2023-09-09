@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { supabase } from './config/db'
 import user from './routes/userRoutes'
+
+
 dotenv.config()
 
 const app: Express = express()

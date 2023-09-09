@@ -4,6 +4,9 @@ import MotionDiv from '../components/MotionDiv'
 import { Link, useNavigate } from 'react-router-dom'
 import peep6 from '../assets/images/peep-6.png'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/ReactToastify.css'
+import toastOptions from '../utils/toastOptions'
 
 
 const Login = () => {
@@ -32,15 +35,16 @@ const Login = () => {
         e.preventDefault();
         try {
             await axios.post("/user/login", { email, password })
-            alert("User Logged in Successfully")
+            toast.success("User Logged in Successfully", toastOptions)
             navigate("/user/home")
 
         }
         catch (err: unknown) {
             if (err.response && err.response.status === 401) {
-                alert("Invalid Credentials.");
+                toast.error("Invalid Credentials", toastOptions)
+                // alert("Invalid Credentials.");
             } else {
-                alert("User Doesn't exists");
+                toast.error("User Doesn't exist", toastOptions)
             }
         }
 
@@ -72,10 +76,11 @@ const Login = () => {
                     {!isValid && <span className='text-sm text-red-500 font-black'>Password should have 1 Uppercase , 1 Lowercase , 1 special character , 1 Number and should be greater than 8 characters</span>}
                 </label>
                 <h1>New here ! <Link to="/register" className='text-second font-bold'>Signup here</Link></h1>
-                <button>Login</button>
+                <button disabled={!isValid}>Login</button>
 
 
             </form>
+            
         </MotionDiv>
     )
 }

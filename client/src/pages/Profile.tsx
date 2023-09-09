@@ -10,7 +10,7 @@ const Profile = () => {
     const {isLoading} = useUserData()
 
     return (
-        <MotionDiv className='flex flex-col gap-4 m-4 md:m-16'>
+        <MotionDiv className='flex flex-col gap-4 m-4 md:mt-2 md:mb-4 md:mx-16'>
             {
                 isLoading ? 
                 <Loader/>

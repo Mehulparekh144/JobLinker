@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 import getDataURI from "../utils/dataURI";
 import multerUploader from "../middlewares/multer";
+import { profile } from "console";
 dotenv.config()
 
 
@@ -90,44 +91,81 @@ router.route("/profile").get((req: Request, res: Response) => {
     }
 })
 
+router.route("/profile/:id").put(isAuthenticated, async (req: Request, res: Response) => {
+    const { id } = req.params
+    const { name, age, email, gender } = req.body
+    console.log(name);
+    const { data, error } = await supabase.from("users").update({ 
+        name: name, 
+        email: email, 
+        age: age, 
+        gender: gender }).eq('id', id)
+    
+    if(error){
+        return res.status(404).json("Internal server error")
+    }
+    return res.json({message:"Profile Updated" , data : data})
+})
+
 router.route("/logout").get((req: Request, res: Response) => {
     res.cookie("token", "").json(true)
 })
 
-router.route("/skills/:id").post(isAuthenticated,multerUploader.single("resume"), async (req: Request, res: Response) => {
+router.route("/skills/:id").post(isAuthenticated, multerUploader.single("resume"), async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        const { totalWork, recentWorkTitle, recentCompany , skills  } = req.body
-        const resume = req.file
-        const resumeURI = getDataURI(resume)
+        const { totalWork, recentWorkTitle, recentCompany, skills, resumeLink } = req.body
         const userData = (await supabase.from('users').select().eq('id', id)).data[0]
-    
-        
-        if (userData.profile_id) {
-            const resumeData = await supabase.storage.from('resumeBucket').update(`resume/${userData.name}${id}.pdf`, resumeURI.buffer, {
-                cacheControl: '3600',
-                upsert: false,
-            })
-            if (resumeData.error) {
-                return res.status(404).json("Internal server error")
-            }
-            const resumeURL = await supabase.storage.from('resumeBucket').getPublicUrl(resumeData.data.path)
-            const profileData = await supabase.from('profiles').update({
-                total_work_ex: totalWork,
-                recent_title: recentWorkTitle,
-                recent_company: recentCompany,
-                skills : skills,
-                resume: resumeURL.data.publicUrl
-            }).eq('id', userData.profile_id)
 
-            return res.json({message : "Profile updated successfully"})
+
+        if (userData.profile_id) {
+            if (resumeLink) {
+                const profileData = await supabase.from('profiles').update({
+                    total_work_ex: totalWork,
+                    recent_title: recentWorkTitle,
+                    recent_company: recentCompany,
+                    skills: skills,
+                }).eq('id', userData.profile_id)
+
+                return res.json({ message: "Profile updated successfully" })
+
+            }
+            else {
+                const resume = req.file
+                const resumeURI = getDataURI(resume)
+                const resumeData = await supabase.storage.from('resumeBucket').upload(`resume/${userData.name}${Date.now()}${id}.pdf`, resumeURI.buffer, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: 'application/pdf'
+                })
+                if (resumeData.error) {
+                    console.log(resumeData.error);
+
+                    return res.status(404).json("Internal server error")
+                }
+                const resumeURL = await supabase.storage.from('resumeBucket').getPublicUrl(resumeData.data.path)
+                const profileData = await supabase.from('profiles').update({
+                    total_work_ex: totalWork,
+                    recent_title: recentWorkTitle,
+                    recent_company: recentCompany,
+                    skills: skills,
+                    resume: resumeURL.data.publicUrl
+                }).eq('id', userData.profile_id)
+
+                return res.json({ message: "Profile updated successfully" })
+            }
         }
         else {
-            const resumeData = await supabase.storage.from('resumeBucket').upload(`resume/${userData.name}${id}.pdf`, resumeURI.buffer, {
+            const resume = req.file
+            const resumeURI = getDataURI(resume)
+            const resumeData = await supabase.storage.from('resumeBucket').upload(`resume/${userData.email}${id}.pdf`, resumeURI.buffer, {
                 cacheControl: '3600',
                 upsert: false,
+                contentType: 'application/pdf'
             })
             if (resumeData.error) {
+                console.log(resumeData.error);
+
                 return res.status(404).json("Internal server error")
             }
             const resumeURL = await supabase.storage.from('resumeBucket').getPublicUrl(resumeData.data.path)
@@ -135,7 +173,7 @@ router.route("/skills/:id").post(isAuthenticated,multerUploader.single("resume")
                 total_work_ex: totalWork,
                 recent_title: recentWorkTitle,
                 recent_company: recentCompany,
-                skills : skills,
+                skills: skills,
                 resume: resumeURL.data.publicUrl
             }]).select("*")
 
@@ -144,7 +182,7 @@ router.route("/skills/:id").post(isAuthenticated,multerUploader.single("resume")
                     profile_id: Number(data[0].id)
                 }).eq('id', id);
 
-                return res.json({message : "Profile Created successfully"});
+                return res.json({ message: "Profile Created successfully" });
             } else {
                 return res.status(500).json({ message: "Profile creation failed" });
             }
@@ -158,23 +196,53 @@ router.route("/skills/:id").post(isAuthenticated,multerUploader.single("resume")
 })
 
 
-router.route("/skills/:id").get(isAuthenticated , async (req:Request , res:Response) =>{
-    try{
+router.route("/skills/:id").get(isAuthenticated, async (req: Request, res: Response) => {
+    try {
         const { id } = req.params
         const userData = (await (supabase.from('users').select().eq('id', id))).data[0]
         if (userData.profile_id) {
-            const profileData = ((await (supabase.from('profiles').select().eq('id' , userData.profile_id))).data[0])
+            const profileData = ((await (supabase.from('profiles').select().eq('id', userData.profile_id))).data[0])
             return res.json(profileData)
         }
-        else{
+        else {
             return res.json(null)
         }
 
     }
-    catch{
+    catch {
         return res.json(null)
     }
-    
+
+})
+
+
+router.route("/resume/:id").delete(isAuthenticated, async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const userData = (await (supabase.from('users').select().eq('id', id))).data[0]
+
+        const { data, error } = await supabase.from('profiles').update({
+            resume: null
+        }).eq('id', userData.profile_id);
+        if (error) {
+            // console.log(error);
+
+            return res.status(404).json("Internal Server error");
+        }
+        return res.status(200).json("Resume deleted successfully");
+    }
+    catch (err) {
+        // console.log(err);
+        res.status(404).json("Internal Server error");
+    }
+
+
+
+
+
+
+
+
 })
 
 export default router

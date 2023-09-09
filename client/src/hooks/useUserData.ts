@@ -2,8 +2,11 @@ import {useEffect , useState} from 'react'
 import { useUserStore } from '../zustand/userStore'
 
 
+
 const useUserData = () => {
-    const { userData, fetchUserData } = useUserStore()
+
+
+    const { userData, profileData , fetchUserData } = useUserStore()
     const [isLoading , setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -14,9 +17,9 @@ const useUserData = () => {
             alert("Error while fetching data")
             setIsLoading(false)
         })
-    }, [fetchUserData ])
 
-    return {userData  ,isLoading}
+    }, [fetchUserData])
+    return {userData , profileData ,isLoading }
 
 }
 

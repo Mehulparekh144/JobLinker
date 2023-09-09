@@ -4,6 +4,8 @@ import MotionDiv from '../components/MotionDiv'
 import { Link, useNavigate } from 'react-router-dom'
 import peep7 from '../assets/images/peep-7.png'
 import axios from 'axios'
+import { toast } from 'react-toastify'
+import toastOptions from '../utils/toastOptions'
 
 
 const Signup = () => {
@@ -37,7 +39,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             await axios.post('/user/signup', { name, email, password, age, role, gender })
-            alert("User created successfully")
+            toast.success("User Registered Successfully", toastOptions)
             setName("")
             setEmail("")
             setAge(1)
@@ -47,11 +49,11 @@ const Signup = () => {
             navigate("/login")
 
         }
-        catch (err:unknown) {
+        catch (err: unknown) {
             if (err.response && err.response.status === 409) {
-                alert("User already exists. Please login.");
+                toast.error("User already exists. Please login."  , toastOptions)
             } else {
-                alert("Internal server error. Please try again later.");
+                toast.error("Internal server error" , toastOptions);
             }
         }
     }
@@ -76,20 +78,20 @@ const Signup = () => {
                 <div className="flex items-center gap-4">
                     <label htmlFor="name" className='w-full'>
                         <h1 className='font-bold'>Name</h1>
-                        <input type="text" id='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='John Doe' required/>
+                        <input type="text" id='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='John Doe' required />
                     </label>
                     <label htmlFor="email" className='w-full'>
                         <h1 className='font-bold'>Email</h1>
-                        <input type="email" id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='jd@mail.com' required/>
+                        <input type="email" id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='jd@mail.com' required />
                     </label>
                 </div>
                 <label htmlFor="age">
                     <h1 className='font-bold'>Age</h1>
-                    <input type="number" id='age' value={age} onChange={(e) => setAge(e.target.valueAsNumber)} placeholder='18' required/>
+                    <input type="number" id='age' value={age} onChange={(e) => setAge(e.target.valueAsNumber)} placeholder='18' required />
                 </label>
                 <label htmlFor="password">
                     <h1 className='font-bold'>Password</h1>
-                    <input type="password" id='password' value={password} onChange={handlePassChange} placeholder='Make it strong like your skills' required/>
+                    <input type="password" id='password' value={password} onChange={handlePassChange} placeholder='Make it strong like your skills' required />
                     {!isValid && <span className='text-sm text-red-500 font-black'>Password should have 1 Uppercase , 1 Lowercase , 1 special character , 1 Number and should be greater than 8 characters</span>}
                 </label>
                 <div className="flex items-center gap-4">
