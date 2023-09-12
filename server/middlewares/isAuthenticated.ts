@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 interface TokenType {
-    id: number
+    id: string
 }
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +15,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
                 return res.status(404).json({ err })
             }
             else {
-                if(Number(id) === userData.id){
+                if(id === userData.id){
                     next()
                 }
                 else{

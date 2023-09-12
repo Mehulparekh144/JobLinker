@@ -6,8 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { RoughNotation } from 'react-rough-notation'
 import axios from 'axios'
 import useUserData from '../hooks/useUserData'
-import {toast} from 'react-toastify'
-import toastOptions from '../utils/toastOptions'
+import { toast } from 'react-toastify'
+import { NavLink } from 'react-router-dom'
 
 
 
@@ -32,19 +32,19 @@ const NavbarComponent = () => {
         },
         {
             title: 'Applications',
-            link: '/user/applications'
+            link: userData?.role ==='candidate'?`/user/applications`: `/user/recruiter/applications`
         },
     ]
 
     const logoutHandler = () => {
         axios.get("/user/logout").then(() => {
             navigate("/login")
-            toast.success("Logged out successfully" , toastOptions)
+            toast.success("Logged out successfully")
         }).catch(() => {
-            toast.error("Error while logging out" , toastOptions)
+            toast.error("Error while logging out")
 
         })
-    }   
+    }
 
 
     return (
@@ -65,11 +65,18 @@ const NavbarComponent = () => {
                         <ul className='flex flex-col gap-2 justify-start items-start text-2xl'>
                             {
                                 menuItems.map((item: MenuItems, index: number) => (
-                                    <li key={index}>
-                                        <Link to={item.link} onClick={() => setIsMenuOpen(false)}>
-                                            {item.title}
-                                        </Link>
-                                    </li>
+                                    item.title != 'Home' ? userData &&
+                                        <li key={index}>
+                                            <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
+                                                {item.title}
+                                            </NavLink>
+                                        </li> :
+                                        <li key={index}>
+                                            <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
+                                                {item.title}
+                                            </NavLink>
+                                        </li>
+
                                 ))
                             }
                             {
@@ -89,19 +96,24 @@ const NavbarComponent = () => {
                 </div>
 
                 <div>
-                    <RoughNotation type="highlight" color='#fdc500' show={true}>
-                        <h1 className='font-bold text-xl'>JobLinker</h1>
-                    </RoughNotation>
+                        <h1 className='font-bold text-xl'>JobLinker.com </h1>
                 </div>
                 <div className='hidden md:block'>
                     <ul className='flex gap-5 justify-center items-center'>
                         {
                             menuItems.map((item: MenuItems, index: number) => (
-                                <li key={index} className='hover:font-semibold hover:translate-y-1 transition ease-in-out'>
-                                    <Link to={item.link}>
+                                item.title != 'Home'? userData &&
+                                <li key={index}>
+                                    <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
                                         {item.title}
-                                    </Link>
+                                    </NavLink>
+                                </li>:
+                                <li key={index}>
+                                    <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
+                                        {item.title}
+                                    </NavLink>
                                 </li>
+
                             ))
                         }
                         {

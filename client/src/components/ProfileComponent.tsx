@@ -5,7 +5,6 @@ import { MdCancel } from '@react-icons/all-files/md/MdCancel'
 import useUserData from '../hooks/useUserData'
 import axios from 'axios'
 import {toast} from 'react-toastify'
-import toastOptions from '../utils/toastOptions'
 
 const ProfileComponent = () => {
     const { userData } = useUserData()
@@ -29,12 +28,12 @@ const ProfileComponent = () => {
         e.preventDefault();
         try{
             await axios.put("/user/profile/" + userData?.id , {name , email , age , gender})
-            toast.success("Profile  updated" , toastOptions)
+            toast.success("Profile  updated" )
             setEdit(true)
         }
         catch(err){
             console.log(err);
-            toast.error("Error" , toastOptions)
+            toast.error("Error" )
         }
 
     }

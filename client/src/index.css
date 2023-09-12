@@ -56,3 +56,36 @@ body::-webkit-scrollbar-thumb {
     transform: rotate(1turn);
   }
 }
+
+
+
+.hover-underline::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fdc500;
+  transition: width 0.2s ease-in-out;
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+.active::after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #fdc500;
+    transition: width 0.2s ease-in-out;
+}
+
+.active::after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #fdc500;
+    transition: width 0.2s ease-in-out;
+}

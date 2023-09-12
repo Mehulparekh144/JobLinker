@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import peep7 from '../assets/images/peep-7.png'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import toastOptions from '../utils/toastOptions'
+
 
 
 const Signup = () => {
@@ -39,7 +39,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             await axios.post('/user/signup', { name, email, password, age, role, gender })
-            toast.success("User Registered Successfully", toastOptions)
+            toast.success("User Registered Successfully")
             setName("")
             setEmail("")
             setAge(1)
@@ -51,9 +51,9 @@ const Signup = () => {
         }
         catch (err: unknown) {
             if (err.response && err.response.status === 409) {
-                toast.error("User already exists. Please login."  , toastOptions)
+                toast.error("User already exists. Please login." )
             } else {
-                toast.error("Internal server error" , toastOptions);
+                toast.error("Internal server error");
             }
         }
     }
@@ -99,7 +99,7 @@ const Signup = () => {
                         <h1 className='font-bold'>Role</h1>
                         <select value={role} onChange={(e) => setRole(e.target.value)} id='role'>
                             <option value="candidate">Candidate</option>
-                            <option value="employer">Employer</option>
+                            <option value="recruiter">Recruiter</option>
                         </select>
                     </label>
                     <label htmlFor="gender" className='w-full'>

@@ -4,9 +4,9 @@ import MotionDiv from '../components/MotionDiv'
 import { Link, useNavigate } from 'react-router-dom'
 import peep6 from '../assets/images/peep-6.png'
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/ReactToastify.css'
-import toastOptions from '../utils/toastOptions'
+
 
 
 const Login = () => {
@@ -35,16 +35,16 @@ const Login = () => {
         e.preventDefault();
         try {
             await axios.post("/user/login", { email, password })
-            toast.success("User Logged in Successfully", toastOptions)
+            toast.success("User Logged in Successfully")
             navigate("/user/home")
 
         }
         catch (err: unknown) {
             if (err.response && err.response.status === 401) {
-                toast.error("Invalid Credentials", toastOptions)
+                toast.error("Invalid Credentials")
                 // alert("Invalid Credentials.");
             } else {
-                toast.error("User Doesn't exist", toastOptions)
+                toast.error("User Doesn't exist")
             }
         }
 

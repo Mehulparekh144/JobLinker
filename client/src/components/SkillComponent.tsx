@@ -7,7 +7,6 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { AiOutlineMinus } from '@react-icons/all-files/ai/AiOutlineMinus'
 import { toast } from 'react-toastify'
-import toastOptions from '../utils/toastOptions'
 
 const SkillComponent = () => {
     const { userData, profileData } = useUserData();
@@ -67,11 +66,11 @@ const SkillComponent = () => {
                     "Content-Type": "multipart/form-data",
                 }
             })
-            toast.success("Profile updated" , toastOptions)
+            toast.success("Profile updated")
             setEdit(true)
         }
         catch {
-            toast.error("Error encountered" , toastOptions)
+            toast.error("Error encountered")
 
         }
     }

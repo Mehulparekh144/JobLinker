@@ -7,21 +7,22 @@ import Loader from '../components/Loader'
 
 const Profile = () => {
 
-    const {isLoading} = useUserData()
+    const { userData, isLoading } = useUserData()
 
     return (
-        <MotionDiv className='flex flex-col gap-4 m-4 md:mt-2 md:mb-4 md:mx-16'>
+        <MotionDiv className={`flex flex-col gap-4 m-4  ${isLoading ? 'md:m-16' : 'md:mt-2 md:mb-4 md:mx-16'}`}>
             {
-                isLoading ? 
-                <Loader/>
-                :
-                <MotionDiv>
-                <ProfileComponent/>
-                <SkillComponent/>
-                </MotionDiv>
-
+                isLoading ?
+                    <Loader />
+                    :
+                    <MotionDiv>
+                        <ProfileComponent />
+                        {userData?.role === 'candidate'?<SkillComponent /> : null}
+                    </MotionDiv>
             }
-            
+
+
+
 
         </MotionDiv>
     )

@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import useUserData from '../hooks/useUserData'
 import { Navigate, useLocation } from 'react-router-dom'
 import Loader from './Loader';
 import MotionDiv from './MotionDiv';
 
 
-interface ProtectedRoutesProps {
+interface RecruiterRouteProps {
     Component: React.ComponentType;
 }
 
-const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ Component }) => {
+const RecruiterRoute: React.FC<RecruiterRouteProps> = ({ Component }) => {
     const { userData, isLoading } = useUserData()
     const location = useLocation()
 
-    if (!userData && !isLoading) {
+    if ((!userData && !isLoading) || (userData?.role != 'recruiter' && !isLoading)) {
         return <Navigate to={"/login"} state={{ from: location }} replace />
     }
     else if (isLoading) {
@@ -21,10 +21,9 @@ const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ Component }) => {
             <Loader />
         </MotionDiv>
     }
-
     return <Component />
 
 
 }
 
-export default ProtectedRoutes
+export default RecruiterRoute

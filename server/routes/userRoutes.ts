@@ -14,7 +14,7 @@ dotenv.config()
 const bcryptSalt = bcrypt.genSaltSync(10);
 
 interface TokenType {
-    id: number
+    id: string
 }
 
 
@@ -116,6 +116,7 @@ router.route("/skills/:id").post(isAuthenticated, multerUploader.single("resume"
         const { id } = req.params
         const { totalWork, recentWorkTitle, recentCompany, skills, resumeLink } = req.body
         const userData = (await supabase.from('users').select().eq('id', id)).data[0]
+        
 
 
         if (userData.profile_id) {
@@ -176,11 +177,13 @@ router.route("/skills/:id").post(isAuthenticated, multerUploader.single("resume"
                 skills: skills,
                 resume: resumeURL.data.publicUrl
             }]).select("*")
+            
 
             if (!error) {
                 const updatedUser = await supabase.from('users').update({
-                    profile_id: Number(data[0].id)
+                    profile_id: data[0].id
                 }).eq('id', id);
+                
 
                 return res.json({ message: "Profile Created successfully" });
             } else {
