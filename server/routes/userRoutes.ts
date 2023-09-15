@@ -7,7 +7,6 @@ import dotenv from 'dotenv'
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 import getDataURI from "../utils/dataURI";
 import multerUploader from "../middlewares/multer";
-import { profile } from "console";
 dotenv.config()
 
 
@@ -95,16 +94,17 @@ router.route("/profile/:id").put(isAuthenticated, async (req: Request, res: Resp
     const { id } = req.params
     const { name, age, email, gender } = req.body
     console.log(name);
-    const { data, error } = await supabase.from("users").update({ 
-        name: name, 
-        email: email, 
-        age: age, 
-        gender: gender }).eq('id', id)
-    
-    if(error){
+    const { data, error } = await supabase.from("users").update({
+        name: name,
+        email: email,
+        age: age,
+        gender: gender
+    }).eq('id', id)
+
+    if (error) {
         return res.status(404).json("Internal server error")
     }
-    return res.json({message:"Profile Updated" , data : data})
+    return res.json({ message: "Profile Updated", data: data })
 })
 
 router.route("/logout").get((req: Request, res: Response) => {
@@ -116,7 +116,7 @@ router.route("/skills/:id").post(isAuthenticated, multerUploader.single("resume"
         const { id } = req.params
         const { totalWork, recentWorkTitle, recentCompany, skills, resumeLink } = req.body
         const userData = (await supabase.from('users').select().eq('id', id)).data[0]
-        
+
 
 
         if (userData.profile_id) {
@@ -177,13 +177,13 @@ router.route("/skills/:id").post(isAuthenticated, multerUploader.single("resume"
                 skills: skills,
                 resume: resumeURL.data.publicUrl
             }]).select("*")
-            
+
 
             if (!error) {
                 const updatedUser = await supabase.from('users').update({
                     profile_id: data[0].id
                 }).eq('id', id);
-                
+
 
                 return res.json({ message: "Profile Created successfully" });
             } else {

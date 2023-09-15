@@ -1,13 +1,19 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { BiArrowBack } from '@react-icons/all-files/bi/BiArrowBack';
 import MotionDiv from '../components/MotionDiv';
 import axios from 'axios';
-import useUserData from '../hooks/useUserData';
 import { toast } from 'react-toastify';
+import useUserData from '../hooks/useUserData';
 
-const AddApplication = () => {
-    const {userData} = useUserData()
+
+
+const EditApplication = () => {
+
+    const { userData, isLoading } = useUserData()
+    let { id } = useParams()
+
+
     const [formData, setFormData] = useState({
         company: '',
         about: '',
@@ -20,17 +26,53 @@ const AddApplication = () => {
         skills: [],
         perks: [],
     });
-    const navigate = useNavigate()
+
+    useEffect(() => {
+        try {
+            axios.get("/recruiter/application/" + userData?.id + "?app_id=" + id).then((response) => {
+                const {
+                    company, 
+                    about,
+                    title,
+                    location,
+                    experience,
+                    salary,
+                    type,
+                    requirements,
+                    skills,
+                    perks,
+                } = response.data
+                
+                setFormData({
+                    company : company,
+                    about : about,
+                    title : title,
+                    location : location,
+                    experience : experience,
+                    salary : salary,
+                    type : type,
+                    requirements : requirements,
+                    skills : skills,
+                    perks : perks,
+                })
+
+            }).catch(() => {
+                toast.error("Internal Server error")
+            })
+        } catch (error) {
+            toast.error("Internal Server error")
+        }
+    }, [])
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        let updatedValue:string | string[] | number = value;
+        let updatedValue: string | string[] | number = value;
 
         if (name === 'requirements' || name === 'skills' || name === 'perks') {
             updatedValue = value.split(',');
         }
 
-        if (name === 'salary'){
+        if (name === 'salary') {
             updatedValue = Number(value)
         }
 
@@ -43,27 +85,14 @@ const AddApplication = () => {
     const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            axios.post("/recruiter/application/" + userData?.id , formData ).then(()=>{
-                toast.success("Application added successfully")
-                setFormData({
-                    company: '',
-                    about: '',
-                    title: '',
-                    location: '',
-                    experience: '0-1',
-                    salary: 0,
-                    type: 'internship',
-                    requirements: [],
-                    skills: [],
-                    perks: [],
-                })
-                navigate("/user/recruiter/applications")
-            }).catch(()=>{
-                toast.error("Internal Server Error")            
+            axios.put("/recruiter/application/" + userData?.id + "?app_id=" + id , formData).then(() => {
+                toast.success("Application updated successfully")
+            }).catch(() => {
+                toast.error("Internal Server Error")
             })
 
         } catch (error) {
-            toast.error("Internal Server Error")            
+            toast.error("Internal Server Error")
         }
     };
 
@@ -71,7 +100,7 @@ const AddApplication = () => {
         <MotionDiv className={`flex flex-col gap-4 m-4 md:mt-2 md:mb-4 md:mx-16`}>
             <div className='flex gap-4 text-2xl md:text-3xl items-center'>
                 <Link to={"/user/recruiter/applications"} className='p-1 bg-main text-second rounded-full'><BiArrowBack /></Link>
-                <h1 className=' font-bold z-10'>New Application</h1>
+                <h1 className=' font-bold z-10'>Edit Application</h1>
             </div>
             <form onSubmit={handleSubmit} className='mt-4 flex flex-col gap-3 '>
                 <div>
@@ -136,10 +165,10 @@ const AddApplication = () => {
                     </div>
                 </div>
 
-                <button>Add Application</button>
+                <button>Modify</button>
             </form>
         </MotionDiv>
-    );
+    )
 }
 
-export default AddApplication;
+export default EditApplication

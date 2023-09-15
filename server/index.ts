@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { supabase } from './config/db'
 import user from './routes/userRoutes'
+import recruiter from './routes/recruiterRoutes'
 
 
 dotenv.config()
@@ -26,4 +27,5 @@ app.listen(8000, () => (
 ))
 
 app.use("/api/user", user)
+app.use("/api/recruiter", recruiter)
 
