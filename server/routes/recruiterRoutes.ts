@@ -1,10 +1,11 @@
-import express, { Request, Response, application } from "express";
+import express, { Request, Response } from "express";
 const router = express.Router()
 import { supabase } from "../config/db";
 import dotenv from 'dotenv'
-import { isAuthenticated } from "../middlewares/isAuthenticated";
 import { isRecruiter } from "../middlewares/isRecruiter";
 dotenv.config()
+
+
 
 
 router.route("/application/:id").post(isRecruiter, async (req: Request, res: Response) => {
@@ -34,19 +35,19 @@ router.route("/application/:id").post(isRecruiter, async (req: Request, res: Res
 router.route("/application/:id").get(isRecruiter, async (req: Request, res: Response) => {
     const { id } = req.params
     const app_id = req.query.app_id
-    if(app_id){
+    if (app_id) {
         try {
             const { data, error } = await supabase.from("applications").select("*").eq('id', app_id).single()
             if (error) {
                 return res.status(404).json({ message: "Internal server error", err: error.message })
             }
             return res.json(data)
-            
+
         } catch (error) {
             return res.status(404).json({ message: "Internal server error", err: error.message })
         }
     }
-    else{
+    else {
         try {
             const { data, error } = await supabase.from("applications").select("*").eq('recruiter', id)
             if (error) {
@@ -56,26 +57,26 @@ router.route("/application/:id").get(isRecruiter, async (req: Request, res: Resp
         }
         catch (error) {
             return res.status(404).json({ message: "Internal server error", err: error.message })
-    
+
         }
     }
 })
 
 
-router.route("/application/:id").delete(isRecruiter , async (req:Request , res:Response) =>{
+router.route("/application/:id").delete(isRecruiter, async (req: Request, res: Response) => {
     const app_id = req.query.app_id
     try {
-        const {data , error} = await supabase.from("applications").delete().eq('id' , app_id)
-        if(error){
-            return res.status(404).json({message : "Internal Server Error" , error : error.message})           
+        const { data, error } = await supabase.from("applications").delete().eq('id', app_id)
+        if (error) {
+            return res.status(404).json({ message: "Internal Server Error", error: error.message })
         }
-        return res.json({message : "Application deleted successfully" , app_id : app_id})
+        return res.json({ message: "Application deleted successfully", app_id: app_id })
     } catch (error) {
-        return res.status(404).json({ message: "Internal Server Error", error: error.message })            
+        return res.status(404).json({ message: "Internal Server Error", error: error.message })
     }
 })
 
-router.route("/application/:id").put(isRecruiter , async (req:Request , res:Response) =>{
+router.route("/application/:id").put(isRecruiter, async (req: Request, res: Response) => {
     const app_id = req.query.app_id
     const {
         company,
@@ -90,7 +91,7 @@ router.route("/application/:id").put(isRecruiter , async (req:Request , res:Resp
         perks,
     } = req.body
     try {
-        const {data , error} = await supabase.from("applications").update(
+        const { data, error } = await supabase.from("applications").update(
             {
                 company: company,
                 about: about,
@@ -103,15 +104,17 @@ router.route("/application/:id").put(isRecruiter , async (req:Request , res:Resp
                 skills: skills,
                 perks: perks,
             }
-        ).eq('id' , app_id).single()
-        if(error){
-            return res.status(404).json({message : "Internal Server Error" , error : error.message})           
+        ).eq('id', app_id).single()
+        if (error) {
+            return res.status(404).json({ message: "Internal Server Error", error: error.message })
         }
-        return res.json({message : "Application updated successfully" , app_id : app_id , data:data})
+        return res.json({ message: "Application updated successfully", app_id: app_id, data: data })
     } catch (error) {
-        return res.status(404).json({ message: "Internal Server Error", error: error.message })            
+        return res.status(404).json({ message: "Internal Server Error", error: error.message })
     }
 })
+
+
 
 
 

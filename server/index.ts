@@ -7,6 +7,7 @@ import cors from 'cors'
 import { supabase } from './config/db'
 import user from './routes/userRoutes'
 import recruiter from './routes/recruiterRoutes'
+import job from './routes/jobRoutes'
 
 
 dotenv.config()
@@ -28,4 +29,5 @@ app.listen(8000, () => (
 
 app.use("/api/user", user)
 app.use("/api/recruiter", recruiter)
+app.use("/api/job", job)
 

@@ -10,8 +10,8 @@ import useUserData from '../hooks/useUserData';
 
 const EditApplication = () => {
 
-    const { userData, isLoading } = useUserData()
-    let { id } = useParams()
+    const { userData } = useUserData()
+    const { id } = useParams()
 
 
     const [formData, setFormData] = useState({
