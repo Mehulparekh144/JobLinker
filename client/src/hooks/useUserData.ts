@@ -6,7 +6,7 @@ import { useUserStore } from '../zustand/userStore'
 const useUserData = () => {
 
 
-    const { userData, profileData , fetchUserData } = useUserStore()
+    const { userData, profileData , applicationData , fetchUserData } = useUserStore()
     const [isLoading , setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const useUserData = () => {
         })
 
     }, [fetchUserData])
-    return {userData , profileData ,isLoading }
+    return {userData , profileData , applicationData ,isLoading }
 
 }
 

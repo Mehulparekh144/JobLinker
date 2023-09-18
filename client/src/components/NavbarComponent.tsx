@@ -32,7 +32,7 @@ const NavbarComponent = () => {
         },
         {
             title: 'Applications',
-            link: userData?.role ==='candidate'?`/user/applications`: `/user/recruiter/applications`
+            link: userData?.role ==='candidate'?`/user/my_applications`: `/user/recruiter/applications`
         },
     ]
 

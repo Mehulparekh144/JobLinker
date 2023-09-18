@@ -36,7 +36,7 @@ const Home = () => {
 
 
 
-    }, [jobDetails, isLoading])
+    }, [jobDetails, isLoading ])
 
 
     return (

@@ -238,14 +238,98 @@ router.route("/resume/:id").delete(isAuthenticated, async (req: Request, res: Re
         // console.log(err);
         res.status(404).json("Internal Server error");
     }
-
-
-
-
-
-
-
-
 })
+
+router.route("/apply/:id").post(isAuthenticated, async (req: Request, res: Response) => {
+    const { id } = req.params
+    const app_id = req.query.app_id
+    try {
+        const appData = await supabase.from("applications").select("*").eq('id', app_id).single()
+        const userAppData = await supabase.from("userapplications").select("*").eq('user_id', id).eq('application_id', app_id).single()
+        if (userAppData.data) {
+            return res.status(409).json("Applied already")
+        }
+        if (appData.data && !appData.error) {
+
+            await supabase.from("applications").update({
+                applicants: appData.data.applicants + 1
+            }).eq('id', app_id)
+
+            const { data, error } = await supabase.from("userapplications").insert([{
+                user_id: id,
+                application_id: app_id
+            },])
+            if (error) {
+
+                return res.status(404).json({ message: "Internal server error", error: error })
+            }
+            return res.json("Applied successfully")
+        }
+        else {
+            return res.status(404).json("Application not found")
+        }
+
+    } catch (error) {
+
+
+        return res.status(404).json({ message: "Internal server error", error: error })
+    }
+})
+
+
+router.route("/my-applications/:id").get(isAuthenticated, async (req: Request, res: Response) => {
+    const { id } = req.params
+    try {
+        const { data, error } = await supabase.from("userapplications").select("application_id , status").eq('user_id', id)
+
+        if (error) {
+            return res.status(404).json({ message: "Internal server error", error: error })
+        }
+
+        const applicationIdMap = data.reduce((acc, row) => {
+            acc[row.application_id] = row.status
+            return acc;
+        }, {})
+
+        const applicationData = await supabase.from("applications").select("*").in('id', Object.keys(applicationIdMap))
+        if (applicationData.error) {
+            return res.status(404).json({ message: "Internal server error", error: error })
+        }
+
+        const combinedData = applicationData.data.map((application) => ({
+            ...application,
+            status: applicationIdMap[application.id],
+        }));
+        return res.json(combinedData)
+
+
+    } catch (error) {
+
+    }
+})
+
+router.route("/my-applications/:id").delete(isAuthenticated, async (req: Request, res: Response) => {
+    const { id } = req.params
+    const app_id = req.query.app_id
+
+    try {
+        const appData = await supabase.from("applications").select("*").eq('id', app_id).single()
+        const { data, error } = await supabase.from("userapplications").delete().eq('user_id', id).eq
+        ('application_id', app_id)
+        if (error) {
+            return res.status(404).json({ message: "Internal server error", error: error })
+        }
+
+        await supabase.from("applications").update({
+            applicants: appData.data.applicants - 1
+        }).eq('id', app_id)
+
+
+        return res.json("Application deleted successfully")
+    } catch (error) {
+        return res.status(404).json({ message: "Internal server error", error: error })
+    }
+})
+
 
 export default router

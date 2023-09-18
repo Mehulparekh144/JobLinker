@@ -13,6 +13,7 @@ import RecruiterApplications from './pages/RecruiterApplications'
 import AddApplication from './pages/AddApplication'
 import EditApplication from './pages/EditApplication'
 import ApplicationPage from './pages/ApplicationPage'
+import UserApplication from './pages/UserApplication'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path='/user' element={<Layout />}>
           <Route path='/user/home' element={<Home/>}/>
           <Route path='/user/profile' element={<Profile/>} />
+          <Route path='/user/my_applications' element={<UserApplication/>} />
           <Route path='/user/application/:id' element={<ApplicationPage/>} />
           <Route path='/user/recruiter/applications' element={<RecruiterRoute Component={RecruiterApplications} />} />
           <Route path='/user/recruiter/application/:id' element={<RecruiterRoute Component={EditApplication} />} />

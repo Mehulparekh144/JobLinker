@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import MotionDiv from '../components/MotionDiv';
 import { AiFillMail } from '@react-icons/all-files/ai/AiFillMail';
@@ -9,11 +9,14 @@ import Loader from '../components/Loader';
 import { HiLocationMarker } from '@react-icons/all-files/hi/HiLocationMarker';
 import { RoughNotation } from 'react-rough-notation';
 import { IoMdArrowDropright } from '@react-icons/all-files/io/IoMdArrowDropright'
+import useUserData from '../hooks/useUserData';
 
 
 
 const ApplicationPage = () => {
     const { id } = useParams()
+    const {userData} = useUserData()
+    const navigate = useNavigate()
     const [applicationData, setApplicationData] = useState({
         company: '',
         about: '',
@@ -29,6 +32,21 @@ const ApplicationPage = () => {
         recruiter_email: ''
     })
     const [isLoading, setIsLoading] = useState(true)
+
+    const applyHandler = (id:string | undefined) => {
+        axios.post("/user/apply/" + userData?.id + '?app_id=' + id).then(() => {
+            toast.success("Application sent successfully")
+            navigate("/user/my-applications")
+        }).catch((error) => {
+            if (error.response.status === 409) {
+                toast.info("Applied already")
+            }
+            else {
+                toast.error("Internal Server error")
+            }
+        })
+    }
+
 
     useEffect(() => {
         if (isLoading) {
@@ -95,7 +113,7 @@ const ApplicationPage = () => {
                                 </div>
                                 <h1 className='font-bold text-second flex gap-2 items-center'>Recruiter - <AiFillMail />{applicationData.recruiter_email}</h1>
                             </div>
-                            <button className='h-max md:mx-16'>Apply</button>
+                            <button className='h-max md:mx-16' onClick={() => applyHandler(id)} disabled={userData == null || userData?.role === 'recruiter'}>Apply</button>
                         </div>
                         <hr />
                         <div className='flex flex-col gap-1 '>
@@ -126,12 +144,12 @@ const ApplicationPage = () => {
                             <div className='flex flex-col gap-1 w-full md:w-1/3 '>
                                 <h1 className='text-lg md:text-2xl font-bold'>Skills</h1>
                                 <div className="flex flex-wrap gap-2">
-                                {
-                                    applicationData.skills.length > 0 &&
-                                    applicationData.skills.map((item, index) => (
-                                        <p className='px-2 py-1 rounded-lg bg-second text-main' key={index}>{item}</p>
-                                    ))
-                                }
+                                    {
+                                        applicationData.skills.length > 0 &&
+                                        applicationData.skills.map((item, index) => (
+                                            <p className='px-2 py-1 rounded-lg font-black bg-second text-main' key={index}>{item}</p>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>

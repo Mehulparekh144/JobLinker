@@ -21,15 +21,19 @@ interface ProfileData {
     skills: Array<string>
 }
 
+
+
 interface UserStore {
     userData: UserData | null;
     profileData : ProfileData | null;
+    applicationData : [] ;
     fetchUserData: () => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
     userData: null,
     profileData : null,
+    applicationData : [],
 
     fetchUserData: async () => {
         try {
@@ -38,13 +42,18 @@ export const useUserStore = create<UserStore>((set) => ({
                 throw new Error('Failed to fetch user data');
             }
             const userData: UserData = response.data;
+
+            const applicationResponse =  await axios.get("http://localhost:8000/api/user/my-applications/" + userData?.id)
+            const applicationData = applicationResponse.data
+
             if(userData?.profile_id){
                 const response = await axios.get("http://localhost:8000/api/user/skills/" +  userData.id)
                 const profileData : ProfileData = response.data;
-                set({ userData , profileData });
+                set({ userData , profileData , applicationData });
             }
+
             else{
-                set({userData})
+                set({userData , applicationData})
             }
         } catch (error) {
             console.error(error);
