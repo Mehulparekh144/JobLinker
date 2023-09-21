@@ -244,6 +244,7 @@ router.route("/apply/:id").post(isAuthenticated, async (req: Request, res: Respo
     const { id } = req.params
     const app_id = req.query.app_id
     try {
+        const userData = await supabase.from('users').select("*").eq('id', id).single()
         const appData = await supabase.from("applications").select("*").eq('id', app_id).single()
         const userAppData = await supabase.from("userapplications").select("*").eq('user_id', id).eq('application_id', app_id).single()
         if (userAppData.data) {
@@ -257,7 +258,9 @@ router.route("/apply/:id").post(isAuthenticated, async (req: Request, res: Respo
 
             const { data, error } = await supabase.from("userapplications").insert([{
                 user_id: id,
-                application_id: app_id
+                application_id: app_id,
+                recruiter_id: appData.data.recruiter,
+                profile_id: userData.data.profile_id
             },])
             if (error) {
 
@@ -315,7 +318,7 @@ router.route("/my-applications/:id").delete(isAuthenticated, async (req: Request
     try {
         const appData = await supabase.from("applications").select("*").eq('id', app_id).single()
         const { data, error } = await supabase.from("userapplications").delete().eq('user_id', id).eq
-        ('application_id', app_id)
+            ('application_id', app_id)
         if (error) {
             return res.status(404).json({ message: "Internal server error", error: error })
         }
