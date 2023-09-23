@@ -128,15 +128,15 @@ router.route("/user-application/:id").get(isRecruiter, async (req: Request, res:
         const appData = await supabase.from('applications').select("*").in('id', app_ids)
         const userData = await supabase.from('users').select("*").in('id', user_ids)
         const profileData = await supabase.from('profiles').select("*").in('id' , profile_ids)
-
-        if (appData.error || userData.error) {
+        
+        if (appData.error || userData.error ) {
             return res.status(404).json({ message: "Internal Server Error" })
         }
 
         const response = userAppData.data.map((userApp) => {
             const application = appData.data.find((app) => app.id === userApp.application_id);
             const user = userData.data.find((u) => u.id === userApp.user_id);
-            const profile = profileData.data.find((u)=> u.id === userApp.profile_id);
+            const profile = profileData.data ? profileData.data.find((u)=> u.id === userApp.profile_id) : null;
             return {
                 application_data: application,
                 user_data: user,

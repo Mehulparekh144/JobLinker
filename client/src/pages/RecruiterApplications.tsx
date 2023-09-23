@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import useUserData from '../hooks/useUserData'
 import axios from 'axios'
 import ApplicationComponent from '../components/ApplicationComponent'
-import SkeletonLoader from '../components/SkeletonLoader'
 
 
 const RecruiterApplications = () => {
@@ -29,9 +28,8 @@ const RecruiterApplications = () => {
         if (isLoading) {
             axios.get("/recruiter/application/" + userData?.id).then((response) => {
                 setApplicationData(response.data)
-                setTimeout(()=>{
-                    setIsLoading(false)
-                },1000)
+                setIsLoading(false)
+
 
 
             }).catch((error) => {
@@ -44,40 +42,31 @@ const RecruiterApplications = () => {
     return (
         <MotionDiv className={`flex flex-col gap-4 m-4 md:mt-2 md:mb-4 md:mx-16`}>
             <div className='flex flex-col gap-4 '>
-            <h1 className='text-2xl md:text-3xl font-bold z-10'>Applications</h1>
-            <Link to={"/user/recruiter/create-application"} className='flex items-center gap-2 bg-main text-second w-max rounded-md px-2 py-1'><AiFillPlusCircle size={18} />Add new application </Link>
-
-            <div className='flex flex-wrap gap-4'>
-                {
-                    isLoading
-                        ? applicationData.map((item: PropsType, index) => (
-                            <SkeletonLoader key={index} />
+                <h1 className='text-2xl md:text-3xl font-bold z-10'>Applications</h1>
+                <Link to={"/user/recruiter/create-application"} className='flex items-center gap-2 bg-main text-second w-max rounded-md px-2 py-1'><AiFillPlusCircle size={18} />Add new application </Link>
+                <div className='flex flex-wrap gap-4'>
+                    {
+                        !isLoading &&
+                        applicationData.map((item: PropsType, index) => (
+                            <ApplicationComponent
+                                key={index}
+                                recruiter_id={item.recruiter}
+                                id={item.id}
+                                title={item.title}
+                                company={item.company}
+                                type={item.type}
+                                salary={item.salary}
+                                location={item.location}
+                                applicants={item.applicants}
+                                date={item.date}
+                                experience={item.experience}
+                            />
                         ))
-                        : 
-                    applicationData.map((item: PropsType, index) => (
-                        <ApplicationComponent
-                            key={index}
-                            recruiter_id={item.recruiter}
-                            id={item.id}
-                            title={item.title}
-                            company={item.company}
-                            type={item.type}
-                            salary={item.salary}
-                            location={item.location}
-                            applicants={item.applicants}
-                            date={item.date}
-                            experience={item.experience}
-                        />
-                    ))
 
-                }
+                    }
 
 
-            </div>
-            </div>
-            <hr />
-            <div className="flex flex-col gap-4">
-                <h1 className='text-2xl md:text-3xl font-bold z-10'>Received Applications</h1>
+                </div>
             </div>
         </MotionDiv>
 
