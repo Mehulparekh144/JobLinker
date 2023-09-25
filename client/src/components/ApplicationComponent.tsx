@@ -6,7 +6,7 @@ import { AiFillEdit } from '@react-icons/all-files/ai/AiFillEdit'
 import { MdDelete } from '@react-icons/all-files/md/MdDelete'
 import React from 'react'
 import MotionDiv from './MotionDiv'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,14 +33,21 @@ interface UserAppInterface {
     user_data: {
         name: string,
         id: string,
+        email: string,
+        age: number,
+        gender: string
     },
-    status: boolean
+    profile_data: {
+        id: string
+    }
+    status: string
 }
 
 
 const ApplicationComponent: React.FC<PropsType> = ({ recruiter_id, id, title, company, type, salary, location, applicants, date, experience }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [userApp, setUserApp] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get("/recruiter/user-application/" + recruiter_id).then((response) => {
@@ -48,9 +55,24 @@ const ApplicationComponent: React.FC<PropsType> = ({ recruiter_id, id, title, co
         }).catch((err) => {
             console.log(err);
         })
-    }, [setUserApp])
+    }, [])
 
-    console.log(userApp);
+
+    const handleProfileDetails = (user_data: {
+        id: string
+    }, profile_data: object, application_data: object, status: string, recruiter_id: string) => {
+        const stateObject = {
+            user_data,
+            application_data,
+            profile_data,
+            status,
+            recruiter_id
+        };
+        console.log(stateObject);
+        navigate('/user/recruiter/profile?user_id=' + user_data.id, { state: stateObject })
+
+    }
+
 
 
     const deleteApplication = (recruiter_id: string, id: string) => {
@@ -115,8 +137,12 @@ const ApplicationComponent: React.FC<PropsType> = ({ recruiter_id, id, title, co
                                     <h1 className='text-md font-black'>
                                         {item.user_data.name}
                                     </h1>
-                                    <p className='text-sm  capitalize font-medium'>Status - {item.status}</p>
-                                    <Link className='text-sm underline italic' to={"/"}>View Details</Link>
+                                    <p className='text-sm  capitalize font-medium'>Status : &nbsp;
+                                        <span className={`px-2 py-1 rounded-lg ${item.status === 'review' ? 'bg-gray-500 text-white' : (item.status === 'reject' ? 'bg-red-500 text-white' : (item.status === 'accept' ? 'bg-emerald-500 text-white' : ''))}`}>
+                                            {item.status}
+                                        </span>
+                                    </p>
+                                    <button className='bg-transparent  text-main hover:bg-transparent text-sm underline italic' onClick={() => handleProfileDetails(item.user_data, item.profile_data, item.application_data, item.status, recruiter_id)}>View Details</button>
                                 </motion.div>
                             ))}
                     </motion.div>

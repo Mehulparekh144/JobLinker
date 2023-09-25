@@ -10,7 +10,6 @@ import ApplicationComponent from '../components/ApplicationComponent'
 const RecruiterApplications = () => {
     const { userData } = useUserData()
     const [applicationData, setApplicationData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
     interface PropsType {
         recruiter: string,
         id: string,
@@ -25,18 +24,15 @@ const RecruiterApplications = () => {
     }
 
     useEffect(() => {
-        if (isLoading) {
+        
             axios.get("/recruiter/application/" + userData?.id).then((response) => {
                 setApplicationData(response.data)
-                setIsLoading(false)
-
-
 
             }).catch((error) => {
                 console.log(error);
             })
-        }
-    }, [isLoading, applicationData, userData?.id])
+        
+    }, [])
 
 
     return (
@@ -46,7 +42,7 @@ const RecruiterApplications = () => {
                 <Link to={"/user/recruiter/create-application"} className='flex items-center gap-2 bg-main text-second w-max rounded-md px-2 py-1'><AiFillPlusCircle size={18} />Add new application </Link>
                 <div className='flex flex-wrap gap-4'>
                     {
-                        !isLoading &&
+                        applicationData.length > 0 ?
                         applicationData.map((item: PropsType, index) => (
                             <ApplicationComponent
                                 key={index}
@@ -62,6 +58,10 @@ const RecruiterApplications = () => {
                                 experience={item.experience}
                             />
                         ))
+                        :
+                        <div className='w-full mt-6'>
+                            <h1 className='text-center text-xl font-medium'>No Applications</h1>
+                        </div>
 
                     }
 

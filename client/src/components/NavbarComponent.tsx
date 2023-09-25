@@ -8,6 +8,7 @@ import axios from 'axios'
 import useUserData from '../hooks/useUserData'
 import { toast } from 'react-toastify'
 import { NavLink } from 'react-router-dom'
+import Banner from './Banner'
 
 
 
@@ -32,13 +33,14 @@ const NavbarComponent = () => {
         },
         {
             title: 'Applications',
-            link: userData?.role ==='candidate'?`/user/my_applications`: `/user/recruiter/applications`
+            link: userData?.role === 'candidate' ? `/user/my_applications` : `/user/recruiter/applications`
         },
     ]
 
     const logoutHandler = () => {
         axios.get("/user/logout").then(() => {
             navigate("/login")
+            localStorage.removeItem('visited')
             toast.success("Logged out successfully")
         }).catch(() => {
             toast.error("Error while logging out")
@@ -48,7 +50,7 @@ const NavbarComponent = () => {
 
 
     return (
-        <div className={`sticky top-2 flex justify-center my-2 z-50`}>
+        <div className={`sticky top-2 flex  justify-center my-2 z-50`}>
             <div className='font-primary w-max text-main h-16 flex gap-6   items-center justify-evenly rounded-lg shadow-md bg-background border-2 px-16 border-main'>
                 <div className='md:hidden'>
                     <button className='bg-main p-2 rounded-full text-white transition ease-in-out' onClick={() => setIsMenuOpen(true)}>
@@ -96,23 +98,23 @@ const NavbarComponent = () => {
                 </div>
 
                 <div>
-                        <h1 className='font-bold text-xl'>JobLinker.com </h1>
+                    <h1 className='font-bold text-xl'>JobLinker.com </h1>
                 </div>
-                <div className='hidden md:block'>
+                <div className='hidden md:block '>
                     <ul className='flex gap-5 justify-center items-center'>
                         {
                             menuItems.map((item: MenuItems, index: number) => (
-                                item.title != 'Home'? userData &&
-                                <li key={index}>
-                                    <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
-                                        {item.title}
-                                    </NavLink>
-                                </li>:
-                                <li key={index}>
-                                    <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
-                                        {item.title}
-                                    </NavLink>
-                                </li>
+                                item.title != 'Home' ? userData &&
+                                    <li key={index}>
+                                        <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
+                                            {item.title}
+                                        </NavLink>
+                                    </li> :
+                                    <li key={index}>
+                                        <NavLink activeClassName="active" to={item.link} onClick={() => setIsMenuOpen(false)}>
+                                            {item.title}
+                                        </NavLink>
+                                    </li>
 
                             ))
                         }
@@ -132,6 +134,8 @@ const NavbarComponent = () => {
 
 
             </div>
+
+
         </div>
     )
 }

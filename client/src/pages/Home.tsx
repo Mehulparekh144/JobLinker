@@ -4,6 +4,9 @@ import { RoughNotation } from 'react-rough-notation'
 import JobComponent from '../components/JobComponent'
 import axios from 'axios'
 import SkeletonLoader from '../components/SkeletonLoader'
+import {toast} from 'react-toastify'
+import useUserData from '../hooks/useUserData'
+
 
 interface JobProps {
     id: string,
@@ -21,6 +24,18 @@ const Home = () => {
 
     const [jobDetails, setJobDetails] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const {userData} = useUserData()
+
+    useEffect(()=>{
+        const hasVisitedBefore = localStorage.getItem('visited')
+
+        if(!hasVisitedBefore){
+            if(!userData?.profile_id && userData?.role === 'candidate' ){
+                toast.info("Complete your profile")
+            }
+            localStorage.setItem('visited' , 'true') 
+        }
+    } , [])
 
     useEffect(() => {
         if (isLoading) {
@@ -33,15 +48,14 @@ const Home = () => {
                 console.log(error);
             })
         }
-
-
-
     }, [jobDetails, isLoading ])
+
+    
 
 
     return (
         <MotionDiv className='m-4 md:m-16 '>
-            <div className='my-14'>
+            <div className='my-12'>
                 <div className='w-max'>
                     <RoughNotation type="box" show={true} color='#fdc500'>
                         <h1 className='text-3xl md:text-5xl z-10'>Job Opportunities</h1>
@@ -52,9 +66,11 @@ const Home = () => {
                     <input type="text" placeholder='Location' />
                     <input type="text" placeholder='Job' />
                     <select>
-                        <option>Remote</option>
-                        <option>Hybrid</option>
-                        <option>Onsite</option>
+                        <option>Years of Experience</option>
+                        <option>0-1</option>
+                        <option>1-2</option>
+                        <option>2-4</option>
+                        <option>4+</option>
                     </select>
                 </div>
             </div>

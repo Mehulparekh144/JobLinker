@@ -111,7 +111,8 @@ const ApplicationPage = () => {
                                         <HiLocationMarker /> <Link target='_blank' to={"https://maps.google.com/?q=" + applicationData.location}>{applicationData.location}</Link>
                                     </div>
                                 </div>
-                                <h1 className='font-bold text-second flex gap-2 items-center'>Recruiter - <AiFillMail />{applicationData.recruiter_email}</h1>
+                                <h1 className='font-bold text-second flex gap-2 items-center'>Recruiter -
+                                    <Link className='flex gap-2 items-center underline' to={"mailto:" + applicationData.recruiter_email}> <AiFillMail />{applicationData.recruiter_email}</Link></h1>
                             </div>
                             <button className='h-max md:mx-16' onClick={() => applyHandler(id)} disabled={userData == null || userData?.role === 'recruiter'}>Apply</button>
                         </div>

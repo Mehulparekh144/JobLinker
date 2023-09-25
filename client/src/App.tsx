@@ -6,7 +6,6 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import axios from 'axios'
-import CandidateRoute from './components/CandidateRoute'
 import { ToastContainer } from 'react-toastify'
 import RecruiterRoute from './components/RecruiterRouter'
 import RecruiterApplications from './pages/RecruiterApplications'
@@ -14,6 +13,7 @@ import AddApplication from './pages/AddApplication'
 import EditApplication from './pages/EditApplication'
 import ApplicationPage from './pages/ApplicationPage'
 import UserApplication from './pages/UserApplication'
+import RecruiterUserProfile from './pages/RecruiterUserProfile'
 
 
 function App() {
@@ -34,13 +34,14 @@ function App() {
           <Route path='/user/recruiter/applications' element={<RecruiterRoute Component={RecruiterApplications} />} />
           <Route path='/user/recruiter/application/:id' element={<RecruiterRoute Component={EditApplication} />} />
           <Route path='/user/recruiter/create-application' element={<RecruiterRoute Component={AddApplication} />} />
+          <Route path={`/user/recruiter/profile/`} element={<RecruiterRoute Component={RecruiterUserProfile} />} />
         </Route>
         <Route path='/' element={<Landing />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Signup />} />
       </Routes>
       <ToastContainer
-        position="top-center"
+        position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}
         closeOnClick={true}

@@ -6,7 +6,7 @@
 
 button,
 .link-button {
-  @apply w-max bg-main text-second rounded-lg px-4 py-1 hover:bg-main/90 transition ease-in;
+  @apply  w-max md:text-medium text-sm bg-main text-second rounded-lg px-4 py-1 hover:bg-main/90 transition ease-in;
 }
 
 input,
@@ -88,4 +88,9 @@ body::-webkit-scrollbar-thumb {
     height: 2px;
     background-color: #fdc500;
     transition: width 0.2s ease-in-out;
+}
+
+
+button:disabled{
+  @apply bg-main/70 cursor-not-allowed
 }

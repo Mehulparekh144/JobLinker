@@ -34,7 +34,9 @@ const UserApplicationComponent:React.FC<PropsType> = ({id,title , company , appl
             <h1 className='text-xl md:text-2xl font-black '>{title}</h1>
             <h1 className='text-sm md:text-md font-semibold italic text-gray-500'>{company} - {applicants} Applicants</h1>
             <p className='font-bold font-secondary text-lg md:text-xl mt-2'>{salary}$/yr</p>
-                <p className=' font-primary text-md md:text-lg mt-2 capitalize flex gap-2 items-center'><BiTimeFive/> Status - {status}</p>
+                <p className=' font-primary text-md md:text-lg mt-2 capitalize flex gap-2 items-center'><BiTimeFive /> Status - <span className={`px-2 py-1 rounded-lg ${status === 'review' ? 'bg-gray-500 text-white' : (status === 'reject' ? 'bg-red-500 text-white' : (status === 'accept' ? 'bg-emerald-500 text-white' : ''))}`}>
+                    {status}
+                </span></p>
             </div>
             <div className='flex gap-2 w-full items-start my-2 md:justify-end'>
                 <button className='w-max' onClick={()=>withdrawApplication(id)}>Withdraw</button>
