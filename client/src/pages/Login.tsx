@@ -80,7 +80,26 @@ const Login = () => {
 
 
             </form>
-            
+            <div className='my-4'>
+                <h1 className='font-black italic'>Test User Details</h1>
+                <div className='flex gap-4 items-center flex-wrap'>
+                <div className=''>
+                    <p className='text-second font-bold'>Candidate</p> 
+                        <p>Email - testcandidate@mail.com
+</p>
+                        <p>Password - testCand@123
+</p>
+                </div>
+                <div>
+                        <p className='text-second font-bold'>Recruiter</p>
+                        <p>Email - testrecruiter@mail.com
+                        </p>
+                        <p>Password - testRecru@123
+                        </p>
+
+                </div>
+                </div>
+            </div>            
         </MotionDiv>
     )
 }

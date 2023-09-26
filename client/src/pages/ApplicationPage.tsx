@@ -36,7 +36,7 @@ const ApplicationPage = () => {
     const applyHandler = (id:string | undefined) => {
         axios.post("/user/apply/" + userData?.id + '?app_id=' + id).then(() => {
             toast.success("Application sent successfully")
-            navigate("/user/my-applications")
+            navigate("/user/my_applications")
         }).catch((error) => {
             if (error.response.status === 409) {
                 toast.info("Applied already")
