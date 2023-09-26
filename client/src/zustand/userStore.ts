@@ -37,17 +37,17 @@ export const useUserStore = create<UserStore>((set) => ({
 
     fetchUserData: async () => {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_BASE_URL+'/user/profile');
+            const response = await axios.get('/user/profile');
             if (response.status !== 200) {
                 throw new Error('Failed to fetch user data');
             }
             const userData: UserData = response.data;
 
-            const applicationResponse = await axios.get(import.meta.env.VITE_API_BASE_URL+"/user/my-applications/" + userData?.id)
+            const applicationResponse = await axios.get("/user/my-applications/" + userData?.id)
             const applicationData = applicationResponse.data
 
             if(userData?.profile_id){
-                const response = await axios.get(import.meta.env.VITE_API_BASE_URL + "/user/skills/" +  userData.id)
+                const response = await axios.get("/user/skills/" +  userData.id)
                 const profileData : ProfileData = response.data;
                 set({ userData , profileData , applicationData });
             }
