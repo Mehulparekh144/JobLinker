@@ -27,10 +27,10 @@ function App() {
     <>
       <Routes>
         <Route path='/user' element={<Layout />}>
-          <Route path='/user/home' element={<Home/>}/>
-          <Route path='/user/profile' element={<Profile/>} />
-          <Route path='/user/my_applications' element={<UserApplication/>} />
-          <Route path='/user/application/:id' element={<ApplicationPage/>} />
+          <Route path='/user/home' element={<Home />} />
+          <Route path='/user/profile' element={<Profile />} />
+          <Route path='/user/my_applications' element={<UserApplication />} />
+          <Route path='/user/application/:id' element={<ApplicationPage />} />
           <Route path='/user/recruiter/applications' element={<RecruiterRoute Component={RecruiterApplications} />} />
           <Route path='/user/recruiter/application/:id' element={<RecruiterRoute Component={EditApplication} />} />
           <Route path='/user/recruiter/create-application' element={<RecruiterRoute Component={AddApplication} />} />
