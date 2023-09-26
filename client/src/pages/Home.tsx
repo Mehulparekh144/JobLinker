@@ -27,6 +27,7 @@ const Home = () => {
     const {userData} = useUserData()
     const [location , setLocation] = useState("")
     const [jobTitle , setJobTitle] = useState("")
+    const [jobType , setJobType] = useState("")
     const [experience , setExperience] = useState("")
 
     useEffect(()=>{
@@ -74,6 +75,12 @@ const Home = () => {
             );
         }
 
+        if (jobType) {
+            filteredJobs = filteredJobs.filter((job:JobProps) =>
+                job.type.toLowerCase() === jobType.toLowerCase()
+            );
+        }
+
         return filteredJobs;
     };
 
@@ -100,6 +107,12 @@ const Home = () => {
                         <option value={"1-2"}>1-2</option>
                         <option value={"2-4"}>2-4</option>
                         <option value={"4+"}>4+</option>
+                    </select>
+                    <select value={jobType} onChange={(e)=>setJobType(e.target.value)}>
+                        <option value={""}>Job Type</option>
+                        <option value={"internship"}>Internship</option>
+                        <option value={"fulltime"}>Full Time</option>
+                        <option value={"contract"}>Contract</option>
                     </select>
                 </div>
             </div>
