@@ -25,6 +25,9 @@ const Home = () => {
     const [jobDetails, setJobDetails] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const {userData} = useUserData()
+    const [location , setLocation] = useState("")
+    const [jobTitle , setJobTitle] = useState("")
+    const [experience , setExperience] = useState("")
 
     useEffect(()=>{
         const hasVisitedBefore = localStorage.getItem('visited')
@@ -50,6 +53,32 @@ const Home = () => {
         }
     }, [jobDetails, isLoading ])
 
+    const filterJobDetails = () => {
+        let filteredJobs = jobDetails;
+
+        if (location) {
+            filteredJobs = filteredJobs.filter((job:JobProps) =>
+                job.location.toLowerCase().includes(location.toLowerCase())
+            );
+        }
+
+        if (jobTitle) {
+            filteredJobs = filteredJobs.filter((job:JobProps) =>
+                job.title.toLowerCase().includes(jobTitle.toLowerCase())
+            );
+        }
+
+        if (experience) {
+            filteredJobs = filteredJobs.filter((job:JobProps) =>
+                job.experience.toLowerCase() === experience.toLowerCase()
+            );
+        }
+
+        return filteredJobs;
+    };
+
+    const filteredJobDetails = filterJobDetails();
+
     
 
 
@@ -63,24 +92,24 @@ const Home = () => {
                 </div>
 
                 <div className='flex md:flex-row flex-col gap-3 my-4'>
-                    <input type="text" placeholder='Location' />
-                    <input type="text" placeholder='Job' />
-                    <select>
-                        <option>Years of Experience</option>
-                        <option>0-1</option>
-                        <option>1-2</option>
-                        <option>2-4</option>
-                        <option>4+</option>
+                    <input type="text" placeholder='Location' value={location} onChange={(e)=>setLocation(e.target.value)} />
+                    <input type="text" placeholder='Job' value={jobTitle} onChange={(e)=>setJobTitle(e.target.value)} />
+                    <select value={experience} onChange={(e)=>setExperience(e.target.value)}>
+                        <option value={""}>Years of Experience</option>
+                        <option value={"0-1"}>0-1</option>
+                        <option value={"1-2"}>1-2</option>
+                        <option value={"2-4"}>2-4</option>
+                        <option value={"4+"}>4+</option>
                     </select>
                 </div>
             </div>
             <div className=' flex flex-col md:flex-row flex-wrap gap-4 items-start justify-start  rounded-lg p-4'>
                 {
                     isLoading ?
-                        jobDetails.map((item: JobProps, index) => (
+                        filteredJobDetails.map((item: JobProps, index) => (
                             <SkeletonLoader key={index} />
                         )) :
-                        jobDetails.map((item: JobProps, index: number) => (
+                        filteredJobDetails.map((item: JobProps, index: number) => (
                             <JobComponent title={item.title}
                                 id={item.id}
                                 key={index}
