@@ -14,7 +14,7 @@ dotenv.config()
 
 const app: Express = express()
 app.use(cors({
-    origin: ["http://localhost:5173", "http://192.168.0.102:5173" , "h"],
+    origin: ["http://localhost:5173", "http://192.168.0.102:5173"],
     credentials: true
 }))
 app.use(express.json())
