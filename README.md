@@ -40,11 +40,11 @@ For backend
 
 ## Screenshots
 
-![screenshots](./demoImages/landing.png)
-![screenshots](./demoImages/home.png)
-![screenshots](./demoImages/profile.png)
-![screenshots](./demoImages/applications.png)
-![screenshots](./demoImages/individual_application.png)
+![screenshots](./demoScreenshots/landing.png)
+![screenshots](./demoScreenshots/home.png)
+![screenshots](./demoScreenshots/profile.png)
+![screenshots](./demoScreenshots/applications.png)
+![screenshots](./demoScreenshots/individual_application.png)
 
 
 
